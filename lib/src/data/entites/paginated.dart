@@ -5,18 +5,12 @@ part 'paginated.g.dart';
 @JsonSerializable(genericArgumentFactories: true)
 class Paginated<T> {
   Paginated({
-    List<T>? items,
-    this.total = 0,
     required this.limit,
     required this.pageNumber,
     required this.hasMore,
+    List<T>? items,
+    this.total = 0,
   }) : items = items ?? const [];
-
-  List<T> items;
-  int total;
-  int limit;
-  int pageNumber;
-  bool hasMore;
 
   factory Paginated.fromJson(
     Map<String, dynamic> json,
@@ -24,6 +18,12 @@ class Paginated<T> {
   ) {
     return _$PaginatedFromJson(json, fromJsonT);
   }
+
+  List<T> items;
+  int total;
+  int limit;
+  int pageNumber;
+  bool hasMore;
 
   Map<String, dynamic> toJson(
     Object? Function(T value) toJsonT,

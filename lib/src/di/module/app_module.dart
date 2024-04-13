@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_cubit_firebase/src/shared/utils/strings.dart';
@@ -44,6 +47,15 @@ abstract class AppModule {
     return NoLogPrinter();
   }
 
+  @Named('firebaseAuth')
+  FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
+
+  @Named('firebaseStorage')
+  FirebaseStorage get firebaseStorage => FirebaseStorage.instance;
+
+  @Named('firebaseFirestore')
+  FirebaseFirestore get firestore => FirebaseFirestore.instance;
+  
   @Named('defaultLocale')
   Locale get defaultLocale => const Locale('ja');
 }

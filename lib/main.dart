@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'src/shared/storage/storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_cubit_firebase/src/shared/storage/storage.dart';
 
 import 'bootstrap.dart';
+import 'firebase_options.dart';
 import 'src/app/app.dart';
 import 'src/configs/server.dart';
 import 'src/di/injection.dart';
@@ -16,12 +16,17 @@ Future<void> init(Server server) async {
   await configureDependencies(server);
   await _clearStorage();
 
+  await Firebase.initializeApp(
+    name: server.name,
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await bootstrap(() => const App());
 }
 
 /// Clears the authorization storage if the app has not run before.
-/// Reads the [_hasRunBeforeStorageKey] from [allPuposedStorage] and if it is null or false,
-/// clears the [authzStorage] and writes true to [_hasRunBeforeStorageKey] in [allPuposedStorage].
+/// Reads the [_hasRunBeforeStorageKey] from [storage] and if it is null or false,
+/// clears the [authStorage] and writes true to [_hasRunBeforeStorageKey] in [storage].
 const _hasRunBeforeStorageKey = 'has_run_before';
 Future<void> _clearStorage() async {
   final allPurposedStorage = GetIt.I<Storage>(

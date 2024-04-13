@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-
-import '../../network/entites/permission_role.dart';
+import '../../data/entites/permission_role.dart';
 
 class RoleBasedWidget extends StatelessWidget {
   const RoleBasedWidget({

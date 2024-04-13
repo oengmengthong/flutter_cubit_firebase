@@ -6,7 +6,8 @@ import 'package:injectable/injectable.dart';
 import 'package:flutter_cubit_firebase/src/routers/app_router.dart';
 import 'package:flutter_cubit_firebase/src/routers/guards.dart';
 
-import '../../network/entites/permission_role.dart';
+import '../../data/entites/permission_role.dart';
+
 
 @module
 abstract class RoutesModule {

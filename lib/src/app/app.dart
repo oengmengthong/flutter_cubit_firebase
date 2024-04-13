@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
-import 'package:flutter_cubit_firebase/src/app/app_cubit.dart';
 import 'package:flutter_cubit_firebase/src/feature/auth/cubit/auth_cubit.dart';
 import 'package:flutter_cubit_firebase/src/l10n/l10n.dart';
 import 'package:flutter_cubit_firebase/src/l10n/l10n_cubit.dart';
@@ -26,9 +25,6 @@ class App extends StatelessWidget {
         BlocProvider<L10nCubit>(
           create: (_) => GetIt.I<L10nCubit>(),
         ),
-        BlocProvider<AppCubit>(
-          create: (_) => GetIt.I<AppCubit>(),
-        ),
       ],
       child: AppTheme(
         themeData: AppThemeData.system(context),
@@ -41,7 +37,6 @@ class App extends StatelessWidget {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               routerConfig: GetIt.I<AppRouter>().config(
-                // reevaluateListenable: authState,
                 navigatorObservers: () => [
                   ClearFocusNavigatorObserver(),
                 ],
