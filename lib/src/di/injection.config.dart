@@ -19,17 +19,24 @@ import 'package:injectable/injectable.dart' as _i2;
 import 'package:logger/logger.dart' as _i14;
 
 import '../data/datasources/local/auth_data_local.dart' as _i15;
+import '../data/datasources/local/room_data_local.dart' as _i17;
+import '../data/datasources/local/user_data_local.dart' as _i16;
 import '../data/datasources/remote/auth_data_remote.dart' as _i10;
 import '../data/datasources/remote/file_data_remote.dart' as _i8;
-import '../data/datasources/remote/room_data_remote.dart' as _i17;
+import '../data/datasources/remote/room_data_remote.dart' as _i19;
 import '../data/datasources/remote/user_data_remote.dart' as _i9;
+import '../data/repositories/auth_repository.dart' as _i22;
+import '../data/repositories/auth_repository_impl.dart' as _i23;
+import '../data/repositories/user_repository.dart' as _i20;
+import '../data/repositories/user_repository_impl.dart' as _i21;
+import '../feature/auth/cubit/auth_cubit.dart' as _i24;
 import '../l10n/l10n_cubit.dart' as _i13;
-import '../routers/app_router.dart' as _i16;
+import '../routers/app_router.dart' as _i18;
 import '../routers/guards.dart' as _i4;
 import '../shared/storage/storage.dart' as _i6;
-import 'module/app_module.dart' as _i20;
-import 'module/routes_module.dart' as _i19;
-import 'module/storage_module.dart' as _i18;
+import 'module/app_module.dart' as _i27;
+import 'module/routes_module.dart' as _i26;
+import 'module/storage_module.dart' as _i25;
 
 const String _staging = 'staging';
 const String _production = 'production';
@@ -111,25 +118,41 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.factory<_i15.AuthDataLocal>(() => _i15.AuthDataLocal(
         storage: gh<_i6.Storage>(instanceName: 'authStorage')));
+    gh.factory<_i16.UserDataLocal>(() => _i16.UserDataLocal(
+        storage: gh<_i6.Storage>(instanceName: 'authStorage')));
     await gh.factoryAsync<String>(
       () => appModule.prodAppVersion,
       instanceName: 'appVersion',
       registerFor: {_production},
       preResolve: true,
     );
-    gh.singleton<_i16.AppRouter>(() => routesModule.appRouter(
+    gh.factory<_i17.RoomDataLocal>(() =>
+        _i17.RoomDataLocal(storage: gh<_i6.Storage>(instanceName: 'storage')));
+    gh.singleton<_i18.AppRouter>(() => routesModule.appRouter(
           gh<_i4.RoleGuard>(),
           gh<List<_i3.AutoRoute>>(),
         ));
-    gh.factory<_i17.RoomDataRemote>(() => _i17.RoomDataRemote(
+    gh.factory<_i19.RoomDataRemote>(() => _i19.RoomDataRemote(
         firestore:
             gh<_i11.FirebaseFirestore>(instanceName: 'firebaseFirestore')));
+    gh.factory<_i20.UserRepository>(() => _i21.UserRepositoryImpl(
+          local: gh<_i16.UserDataLocal>(),
+          remote: gh<_i9.UserDataRemote>(),
+        ));
+    gh.factory<_i22.AuthRepository>(() => _i23.AuthRepositoryImpl(
+          local: gh<_i15.AuthDataLocal>(),
+          remote: gh<_i10.AuthDataRemote>(),
+        ));
+    gh.factory<_i24.AuthCubit>(() => _i24.AuthCubit(
+          gh<_i22.AuthRepository>(),
+          gh<_i20.UserRepository>(),
+        ));
     return this;
   }
 }
 
-class _$StorageModule extends _i18.StorageModule {}
+class _$StorageModule extends _i25.StorageModule {}
 
-class _$RoutesModule extends _i19.RoutesModule {}
+class _$RoutesModule extends _i26.RoutesModule {}
 
-class _$AppModule extends _i20.AppModule {}
+class _$AppModule extends _i27.AppModule {}
