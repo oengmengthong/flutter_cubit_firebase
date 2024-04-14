@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit_firebase/src/feature/counter/counter.dart';
 import 'package:flutter_cubit_firebase/src/l10n/l10n.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../shared/utils/routes.dart';
 
@@ -13,7 +14,7 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CounterCubit(),
+      create: (_) => GetIt.I<CounterCubit>(),
       child: const CounterView(),
     );
   }
